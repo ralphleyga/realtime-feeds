@@ -1,4 +1,4 @@
-#Realtime Feeds
+# Realtime Feeds
 
 
 Feeds is a django app built from channels (django channels) with easy integration of realtime feed or announcements. It is useful for small pop realtime feed or announcement or use in notifications.
