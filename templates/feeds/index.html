@@ -47,7 +47,7 @@
             }
 
             feedSocket.onmessage = function(e){
-                console.log('on message')
+                addFeed('hello', 'description')
             }
 
             feedSocket.onclose = function(e) {
@@ -55,6 +55,7 @@
             }
 
             function addFeed(feed_title, feed_description) {
+                console.log('on message')
                 var html = ''
                     + '<div class="alert alert-primary" role="alert">'
                         + '<strong>'+ feed_title +'</strong>'
@@ -65,10 +66,10 @@
 
             $('#id_add_feed').on('click', function(e){
                 e.preventDefault();
-                addFeed('hello', 'description')
+                
                 feedSocket.send(JSON.stringify({
-                    'message': 'hello json'
-                }))
+                    'feed_id': 2
+                }));
             })
 
 

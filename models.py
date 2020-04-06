@@ -18,8 +18,8 @@ class Feed(models.Model):
 
 
 def feed_signal(sender, **kwargs):
-    # Your specific logic here
-
+    """Feed if any new feeds
+    """
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.run_until_complete(FetchFeed().send_feed(feed_id=kwargs['instance'].id))
