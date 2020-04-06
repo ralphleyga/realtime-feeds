@@ -14,7 +14,6 @@
     <body>
         <div class="container mt-2">
             <h1>Feeds</h1>
-            <a href="#" id="id_add_feed">Add Feed</a>
             <div id="id_feeds">
                 {% for feed in feeds %}
                     <div class="alert alert-primary" role="alert">
@@ -39,7 +38,6 @@
             }
 
             var endpoint = ws + '://' + window.location.host + /feeds/;
-            console.log(endpoint)
             const feedSocket = new ReconnectingWebSocket(endpoint);
             
             feedSocket.onopen = function(e) {
@@ -47,7 +45,8 @@
             }
 
             feedSocket.onmessage = function(e){
-                addFeed('hello', 'description')
+                var data = JSON.parse(e.data)
+                addFeed(data.title, data.description)
             }
 
             feedSocket.onclose = function(e) {
@@ -55,7 +54,6 @@
             }
 
             function addFeed(feed_title, feed_description) {
-                console.log('on message')
                 var html = ''
                     + '<div class="alert alert-primary" role="alert">'
                         + '<strong>'+ feed_title +'</strong>'
@@ -63,16 +61,6 @@
                     + '</div>';
                 $('#id_feeds').prepend(html)
             }
-
-            $('#id_add_feed').on('click', function(e){
-                e.preventDefault();
-                
-                feedSocket.send(JSON.stringify({
-                    'feed_id': 2
-                }));
-            })
-
-
 
         </script>
     </body>
