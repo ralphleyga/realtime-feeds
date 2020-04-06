@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Real Time Feeds</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="container mt-2">
+            <h1>Feeds</h1>
+            <a href="#" id="id_add_feed">Add Feed</a>
+            <div id="id_feeds">
+                {% for feed in feeds %}
+                    <div class="alert alert-primary" role="alert">
+                        <strong>{{ feed.title }}</strong>
+                        <p>{{ feed.description }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <script
+                src="//code.jquery.com/jquery-3.4.1.js"
+                integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+                crossorigin="anonymous"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.js"></script>
+        <script type="text/javascript">
+            var ws = 'ws';
+            var loc = window.location;
+
+            if (loc.protocol == 'https:') {
+                ws = 'wss';
+            }
+
+            var endpoint = ws + '://' + window.location.host + /feeds/;
+            console.log(endpoint)
+            const feedSocket = new ReconnectingWebSocket(endpoint);
+            
+            feedSocket.onopen = function(e) {
+                console.log('on open')
+            }
+
+            feedSocket.onmessage = function(e){
+                console.log('on message')
+            }
+
+            feedSocket.onclose = function(e) {
+                console.log('on close')
+            }
+
+            function addFeed(feed_title, feed_description) {
+                var html = ''
+                    + '<div class="alert alert-primary" role="alert">'
+                        + '<strong>'+ feed_title +'</strong>'
+                        + '<p>'+ feed_description +'</p>'
+                    + '</div>';
+                $('#id_feeds').prepend(html)
+            }
+
+            $('#id_add_feed').on('click', function(e){
+                e.preventDefault();
+                addFeed('hello', 'description')
+                feedSocket.send(JSON.stringify({
+                    'message': 'hello json'
+                }))
+            })
+
+
+
+        </script>
+    </body>
+</html>
